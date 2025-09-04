@@ -28,9 +28,10 @@ pipeline {
         withCredentials([string(credentialsId: "KUBECONFIG_CONTENT", variable: "KCONF")]){
           sh '''
             mkdir -p .kube
-            echo "$KCONF" > .kube/config
+            # Windows CR 제거 후 원본 그대로 저장
+            printf "%s" "$KCONF" | tr -d '\\r' > .kube/config
             export KUBECONFIG=$PWD/.kube/config
-            kubectl version --client
+            kubectl config current-context
           '''
         }
       }
