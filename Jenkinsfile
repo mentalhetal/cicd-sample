@@ -30,7 +30,8 @@ pipeline {
             mkdir -p .kube
             cp "$KCONF_FILE" .kube/config
             export KUBECONFIG=$PWD/.kube/config
-            kubectl config current-context
+            kubectl cluster-info
+            kubectl get nodes
           '''
         }
       }
