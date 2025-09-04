@@ -27,7 +27,9 @@ pipeline {
       steps{
         withCredentials([file(credentialsId: 'KUBECONFIG_FILE', variable: 'KCONF_FILE')]) {
           sh '''
-            export KUBECONFIG="$KCONF_FILE"
+            mkdir -p .kube
+            cp "$KCONF_FILE" .kube/config
+            export KUBECONFIG=$PWD/.kube/config
             kubectl config current-context
           '''
         }
