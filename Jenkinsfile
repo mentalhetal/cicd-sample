@@ -25,11 +25,9 @@ pipeline {
     }
     stage("Prepare Kubeconfig"){
       steps{
-        withCredentials([string(credentialsId: "KUBECONFIG_CONTENT", variable: "KCONF")]){
+        withCredentials([file(credentialsId: 'KUBECONFIG_FILE', variable: 'KCONF_FILE')]) {
           sh '''
-            mkdir -p .kube
-            printf "%s" "$KCONF" | tr -d '\\r' > .kube/config
-            export KUBECONFIG=$PWD/.kube/config
+            export KUBECONFIG="$KCONF_FILE"
             kubectl config current-context
           '''
         }
